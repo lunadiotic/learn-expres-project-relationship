@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detail Garment</title>
+</head>
+<body>
+    <h1><%= garment.name %></h1>
+    <ul>
+        <li>Location: <%= garment.location %></li>
+        <li>Kontak: <%= garment.contact %></li>
+    </ul>
+    <a href="/garments">All Garments</a>
+    <a href="/garments/<%= garment._id %>/edit">Edit</a>
+    <form action="/garments/<%= garment._id %>?_method=DELETE" method="post">
+        <button type="submit">Delete</button>
+    </form>
+</body>
+</html>
