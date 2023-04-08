@@ -65,6 +65,7 @@ app.post('/garments/:garment_id/products', wrapAsync(async (req, res) => {
     const garment = await Garment.findById(garment_id)
     const product = new Product(req.body)
     garment.products.push(product)
+    product.garment = garment
     await garment.save()
     await product.save()
     res.redirect(`/garments/${garment_id}`)
@@ -94,7 +95,7 @@ app.post('/products', wrapAsync(async (req, res) => {
 
 app.get('/products/:id', wrapAsync(async (req, res) => {
     const { id } = req.params
-    const product = await Product.findById(id)
+    const product = await Product.findById(id).populate('garment')
     res.render('products/show', { product })
 }))
 
