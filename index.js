@@ -2,6 +2,8 @@ const path = require('path');
 const express = require('express')
 const methodOverride = require('method-override')
 const mongoose = require('mongoose')
+const session = require('express-session')
+const flash = require('connect-flash')
 const app = express()
 const ErrorHandler = require('./ErrorHandler')
 
@@ -21,6 +23,17 @@ app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'ejs')
 app.use(express.urlencoded({ extended: true }))
 app.use(methodOverride('_method'))
+app.use(session({
+    secret: 'keyboard-cat',
+    resave: false,
+    saveUninitialized: false
+}))
+app.use(flash())
+
+app.use((req, res, next) => {
+    res.locals.flash_messages = req.flash('flash_messages')
+    next();
+})
 
 function wrapAsync(fn) {
     return function (req, res, next) {
@@ -44,6 +57,7 @@ app.get('/garments/create', (req, res) => {
 app.post('/garments', wrapAsync(async (req, res) => {
     const garment = new Garment(req.body)
     await garment.save()
+    req.flash('flash_messages', 'Berhasil menambahkan data Pabrik!')
     res.redirect(`/garments`)
 }))
 
